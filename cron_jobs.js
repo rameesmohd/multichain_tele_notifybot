@@ -31,10 +31,10 @@ const scheduleRandom = (fn, minCount, maxCount, type) => {
 ---------------------------------------- */
 const runDailyWithdraws = async () => {
   // TRC20 random withdraws
-  scheduleRandom(trc20Notify, 10, 20, 'withdraw');
+  scheduleRandom(trc20Notify, 10, 25, 'withdraw');
 
   // BEP20 random withdraws
-  scheduleRandom(bep20Notify, 10, 20, 'withdraw');
+  scheduleRandom(bep20Notify, 10, 25, 'withdraw');
 };
 
 
@@ -61,7 +61,7 @@ cron.schedule('0 0 * * *', runDailyPayouts);
    TESTING SHORTCUTS (REMOVE IN PRODUCTION)
 ---------------------------------------- */
 
-// // TRC20 Test
+// // TRC20 Test R
 // (async () => {
 //   await trc20Notify({ type: 'withdraw', wallet: 'usdt' });
 // })();
