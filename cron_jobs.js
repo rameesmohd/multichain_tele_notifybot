@@ -1,57 +1,78 @@
 const cron = require('node-cron');
-const { notifyTransactions } = require('./controller/trc20-notifier.js');
 
-const randomNotify = async() => {
-    // Generate a random number of notifications between 10 and 20
-    const numberOfNotifications = Math.floor(Math.random() * 11) + 10;
+// TRC20 Notifier
+const { notifyTransactions: trc20Notify } = require('./controller/trc20-notifier.js');
 
-    for (let i = 0; i < numberOfNotifications; i++) {
-        const randomHours = Math.floor(Math.random() * 24);
-        const randomMinutes = Math.floor(Math.random() * 60);
-        const randomMilliseconds = ((randomHours * 60) + randomMinutes) * 60 * 1000;
+// BEP20 Notifier
+const { notifyTransactions: bep20Notify } = require('./controller/bep20-notifier.js');
 
-        setTimeout(async () => {
-            await notifyTransactions({ type: 'withdraw', wallet: 'usdt' });
-        }, randomMilliseconds);
-    }
+
+/* ---------------------------------------
+   GENERATES RANDOM DELAYED NOTIFICATIONS
+---------------------------------------- */
+const scheduleRandom = (fn, minCount, maxCount, type) => {
+  const count = Math.floor(Math.random() * (maxCount - minCount + 1)) + minCount;
+
+  for (let i = 0; i < count; i++) {
+    const hours = Math.floor(Math.random() * 24);
+    const minutes = Math.floor(Math.random() * 60);
+
+    const delayMs = ((hours * 60) + minutes) * 60 * 1000;
+
+    setTimeout(async () => {
+      await fn({ type, wallet: 'usdt' });
+    }, delayMs);
+  }
 };
 
-const randomPayoutNotify = async() => {
-    // Generate a random number of notifications between 10 and 20
-    const numberOfNotifications = Math.floor(Math.random() * 1) + 4;
 
-    for (let i = 0; i < numberOfNotifications; i++) {
-        const randomHours = Math.floor(Math.random() * 24);
-        const randomMinutes = Math.floor(Math.random() * 60);
-        const randomMilliseconds = ((randomHours * 60) + randomMinutes) * 60 * 1000;
+/* ---------------------------------------
+   DAILY RANDOMIZED WITHDRAW NOTIFICATIONS
+---------------------------------------- */
+const runDailyWithdraws = async () => {
+  // TRC20 random withdraws
+  scheduleRandom(trc20Notify, 10, 20, 'withdraw');
 
-        setTimeout(async () => {
-            await notifyTransactions({ type: 'payout', wallet: 'usdt' });
-        }, randomMilliseconds);
-    }
+  // BEP20 random withdraws
+  scheduleRandom(bep20Notify, 10, 20, 'withdraw');
 };
 
-// Schedule the randomNotify function to run once daily at midnight
-// cron.schedule('0 0 * * *', randomNotify)
-// cron.schedule('0 0 * * *', randomPayoutNotify)
+
+/* ---------------------------------------
+   DAILY RANDOMIZED PAYOUT NOTIFICATIONS
+---------------------------------------- */
+const runDailyPayouts = async () => {
+  // TRC20 payouts
+  scheduleRandom(trc20Notify, 4, 8, 'payout');
+
+  // BEP20 payouts
+  scheduleRandom(bep20Notify, 4, 8, 'payout');
+};
 
 
-const test=async()=>{
-    notifyTransactions({ type: 'withdraw', wallet: 'usdt' })
-}
+/* ---------------------------------------
+   CRON SCHEDULERS (RUN DAILY AT 00:00)
+---------------------------------------- */
+cron.schedule('0 0 * * *', runDailyWithdraws);
+cron.schedule('0 0 * * *', runDailyPayouts);
 
-test()
 
+/* ---------------------------------------
+   TESTING SHORTCUTS (REMOVE IN PRODUCTION)
+---------------------------------------- */
 
-const { notifyTransactions : bep20Notify} = require('./controller/bep20-notifier.js');
+// // TRC20 Test
+// (async () => {
+//   await trc20Notify({ type: 'withdraw', wallet: 'usdt' });
+// })();
 
-(async () => {
-  await bep20Notify({ type: 'withdraw', wallet: 'usdt' });
-})();
+// // BEP20 Test
+// (async () => {
+//   await bep20Notify({ type: 'withdraw', wallet: 'usdt' });
+// })();
 
 
 module.exports = {
-    randomNotify
+  runDailyWithdraws,
+  runDailyPayouts
 };
-
-
