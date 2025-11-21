@@ -62,14 +62,14 @@ cron.schedule('0 0 * * *', runDailyPayouts);
 ---------------------------------------- */
 
 // // TRC20 Test R
-// (async () => {
-//   await trc20Notify({ type: 'withdraw', wallet: 'usdt' });
-// })();
+(async () => {
+  await trc20Notify({ type: 'withdraw', wallet: 'usdt' });
+})();
 
 // // BEP20 Test
-// (async () => {
-//   await bep20Notify({ type: 'withdraw', wallet: 'usdt' });
-// })();
+(async () => {
+  await bep20Notify({ type: 'withdraw', wallet: 'usdt' });
+})();
 
 
 module.exports = {
