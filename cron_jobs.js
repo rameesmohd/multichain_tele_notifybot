@@ -56,20 +56,22 @@ const runDailyPayouts = async () => {
 cron.schedule('0 0 * * *', runDailyWithdraws);
 cron.schedule('0 0 * * *', runDailyPayouts);
 
+runDailyWithdraws()
+runDailyPayouts()
 
 /* ---------------------------------------
    TESTING SHORTCUTS (REMOVE IN PRODUCTION)
 ---------------------------------------- */
 
 // // TRC20 Test R
-(async () => {
-  await trc20Notify({ type: 'withdraw', wallet: 'usdt' });
-})();
+// (async () => {
+//   await trc20Notify({ type: 'withdraw', wallet: 'usdt' });
+// })();
 
 // // BEP20 Test
-(async () => {
-  await bep20Notify({ type: 'withdraw', wallet: 'usdt' });
-})();
+// (async () => {
+//   await bep20Notify({ type: 'withdraw', wallet: 'usdt' });
+// })();
 
 
 module.exports = {
