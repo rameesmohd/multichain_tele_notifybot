@@ -73,7 +73,7 @@ const sendWithdrawMessage = async ({ user, amount, transaction }) => {
     await axios.post(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
       chat_id: channelId,
       photo:
-        "https://res.cloudinary.com/dj5inosqh/image/upload/v1763743019/1_fso93d.png",
+        "https://res.cloudinary.com/dqtevw6ky/image/upload/v1766474812/312_hgxlpd.png",
       caption,
       parse_mode: "MarkdownV2",
     });
